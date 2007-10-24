@@ -1,3 +1,7 @@
+1.07    2007-10-24    Fixed bug in self-closing tags, thanks to Sergio
+                        Fanchiotti.
+                      Added POD tests.
+
 1.06    2007-03-04    Fixed bug in open tags with no attributes and a single
                         whitespace char between the name and the >.  Thanks
                         to Gary Ansok.
