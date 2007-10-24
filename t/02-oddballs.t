@@ -2,7 +2,7 @@ use XML::Tiny qw(parsefile);
 
 use strict;
 require "t/test_functions";
-print "1..3\n";
+print "1..4\n";
 
 $^W = 1;
 
@@ -16,3 +16,6 @@ ok($@ eq "Junk after end of document\n", "Fail if there's trailing text crap");
 
 eval { parsefile('t/text-only.xml'); };
 ok($@ eq "No elements\n", "Fail if there's text but no XML");
+
+eval { parsefile('t/self-closing-optional-trailing-space.xml'); };
+ok(!$@, "Don't fail on self-closing tags with no space before />");

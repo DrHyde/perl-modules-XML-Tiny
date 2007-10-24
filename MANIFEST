@@ -238,3 +238,6 @@ t/w3c/not-wf/sa/null.ent
 t/w3c/not-wf/sa/094.xml~
 t/50-trailing-whitespace.t
 t/trailing-whitespace-in-tags.xml
+t/pod-coverage.t
+t/pod.t
+t/self-closing-optional-trailing-space.xml

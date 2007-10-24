@@ -221,8 +221,8 @@ sub parsefile {
         } elsif($token =~ m!^</($regexps{name})\s*>!i) {     # close tag
 	    die("Not well-formed\n\tat $token\n") if($elem->{name} ne $1);
 	    $elem = delete $elem->{parent};
-        } elsif($token =~ /^<$regexps{name}(\s[^>]*)?>/is) {   # open tag
-	    my($tagname, $attribs_raw) = ($token =~ m!<(\S*)(.*?)/?>!s);
+        } elsif($token =~ /^<$regexps{name}(\s[^>]*)*(\s*\/)?>/is) {   # open tag
+	    my($tagname, $attribs_raw) = ($token =~ m!<(\S*)(.*?)(\s*/)?>!s);
 	    # first make attribs into a list so we can spot duplicate keys
 	    my $attrib  = [
 	        # do double- and single- quoted attribs seperately
@@ -241,7 +241,7 @@ sub parsefile {
 
 	    unless($params{no_entity_parsing}) {
 	        foreach my $key (keys %{$attrib}) {
-	            $attrib->{$key} = fixentities($attrib->{$key})
+	            $attrib->{$key} = _fixentities($attrib->{$key})
                 }
             }
 	    $elem = {
@@ -258,7 +258,7 @@ sub parsefile {
             die("I can't handle this document\n\tat $token\n");
         } else {                          # ordinary content
 	    $token =~ s/\x00//g; # get rid of our CDATA marker
-            unless($params{no_entity_parsing}) { $token = fixentities($token); }
+            unless($params{no_entity_parsing}) { $token = _fixentities($token); }
             push @{$elem->{content}}, { content => $token, type => 't' };
         }
     }
@@ -270,7 +270,7 @@ sub parsefile {
     return $elem->{content};
 }
 
-sub fixentities {
+sub _fixentities {
     my $thingy = shift;
 
     my $junk = ($strict_entity_parsing) ? '|.*' : '';
@@ -452,7 +452,9 @@ and to Matt for providing code to implement it in a quick n dirty minimal
 kind of way;
 
 to the people on L<http://use.perl.org/> and elsewhere who have been kind
-enough to point out ways it could be improved.
+enough to point out ways it could be improved;
+
+to Sergio Fanchiotti for pointing out a bug in handling self-closing tags.
 
 =head1 COPYRIGHT and LICENCE
 
