@@ -1,3 +1,6 @@
+1.08    2007-10-25    Fixed another bug in self-closing tags, introduced in
+                        1.07 and again reported by Sergio.
+
 1.07    2007-10-24    Fixed bug in self-closing tags, thanks to Sergio
                         Fanchiotti.
                       Added POD tests.

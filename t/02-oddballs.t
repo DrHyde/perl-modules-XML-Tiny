@@ -2,7 +2,7 @@ use XML::Tiny qw(parsefile);
 
 use strict;
 require "t/test_functions";
-print "1..4\n";
+print "1..5\n";
 
 $^W = 1;
 
@@ -19,3 +19,15 @@ ok($@ eq "No elements\n", "Fail if there's text but no XML");
 
 eval { parsefile('t/self-closing-optional-trailing-space.xml'); };
 ok(!$@, "Don't fail on self-closing tags with no space before />");
+
+is_deeply(
+    parsefile('_TINY_XML_STRING_<a/>'),
+    [{
+        'attrib' => {},
+        'name' => 'a',
+        'content' => [],
+        'type' => 'e'
+    }],
+    "No trailing slash on 'name' of self-closing tags"
+);
+

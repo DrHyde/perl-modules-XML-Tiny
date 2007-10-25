@@ -6,7 +6,7 @@ require Exporter;
 
 use vars qw($VERSION @EXPORT_OK @ISA);
 
-$VERSION = '1.07';
+$VERSION = '1.08';
 @EXPORT_OK = qw(parsefile);
 @ISA = qw(Exporter);
 
@@ -253,7 +253,10 @@ sub parsefile {
             };
 	    push @{$elem->{parent}->{content}}, $elem;
 	    # now handle self-closing tags
-	    $elem = delete $elem->{parent} if($token =~ /\s*\/>$/);
+            if($token =~ /\s*\/>$/) {
+                $elem->{name} =~ s/\/$//;
+	        $elem = delete $elem->{parent};
+            }
         } elsif($token =~ /^</) { # some token taggish thing
             die("I can't handle this document\n\tat $token\n");
         } else {                          # ordinary content
@@ -454,7 +457,8 @@ kind of way;
 to the people on L<http://use.perl.org/> and elsewhere who have been kind
 enough to point out ways it could be improved;
 
-to Sergio Fanchiotti for pointing out a bug in handling self-closing tags.
+to Sergio Fanchiotti for pointing out a bug in handling self-closing tags,
+and for reporting another bug that I introduced when fixing the first one.
 
 =head1 COPYRIGHT and LICENCE
 
