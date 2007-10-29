@@ -1,9 +1,10 @@
-# $Id: pod-coverage.t,v 1.1 2007/07/30 12:49:39 drhyde Exp $
+# $Id: pod-coverage.t,v 1.2 2007/10/29 22:48:48 drhyde Exp $
 use strict;
-
 $^W=1;
 
-use Test::More;
 eval "use Test::Pod::Coverage 1.00";
-plan skip_all => "Test::Pod::Coverage 1.00 required for testing POD coverage" if $@;
-all_pod_coverage_ok();
+if($@) {
+    print "1..0 # Test::Pod::Coverage 1.00 required for testing POD coverage";
+} else {
+    all_pod_coverage_ok();
+}

@@ -1,3 +1,7 @@
+1.10    XXXX-XX-XX    POD tests no longer require Test::More
+
+1.09    2007-10-29    Fixed filehandle localisation bug
+
 1.08    2007-10-25    Fixed another bug in self-closing tags, introduced in
                         1.07 and again reported by Sergio.
 
