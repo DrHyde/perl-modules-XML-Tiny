@@ -6,7 +6,7 @@ require Exporter;
 
 use vars qw($VERSION @EXPORT_OK @ISA);
 
-$VERSION = '1.08';
+$VERSION = '1.09';
 @EXPORT_OK = qw(parsefile);
 @ISA = qw(Exporter);
 
@@ -171,6 +171,7 @@ sub parsefile {
         if($arg =~ /^_TINY_XML_STRING_(.*)/) { # it's a string
             $file = $1;
         } else {
+            local *FH;
             open(FH, $arg) || die(__PACKAGE__."::parsefile: Can't open $arg\n");
             $file = <FH>;
             close(FH);
@@ -458,7 +459,9 @@ to the people on L<http://use.perl.org/> and elsewhere who have been kind
 enough to point out ways it could be improved;
 
 to Sergio Fanchiotti for pointing out a bug in handling self-closing tags,
-and for reporting another bug that I introduced when fixing the first one.
+and for reporting another bug that I introduced when fixing the first one;
+
+to 'Corion' for finding a bug with localised filehandles and providing a fix.
 
 =head1 COPYRIGHT and LICENCE
 

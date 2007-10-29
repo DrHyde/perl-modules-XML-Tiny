@@ -213,3 +213,5 @@ t/trailing-whitespace-in-tags.xml
 t/pod-coverage.t
 t/pod.t
 t/self-closing-optional-trailing-space.xml
+t/51-localize-filehandle.t
+t/localize-filehandles.xml
