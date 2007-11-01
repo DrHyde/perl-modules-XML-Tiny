@@ -1,4 +1,6 @@
-1.10    XXXX-XX-XX    POD tests no longer require Test::More (thanks
+1.11    2007-11-01    Fix broken TAP in POD tests
+
+1.10    2007-10-29    POD tests no longer require Test::More (thanks
                         to Jonathan Stowe for pointing this bug out)
 
 1.09    2007-10-29    Fixed filehandle localisation bug

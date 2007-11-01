@@ -6,7 +6,7 @@ require Exporter;
 
 use vars qw($VERSION @EXPORT_OK @ISA);
 
-$VERSION = '1.10';
+$VERSION = '1.11';
 @EXPORT_OK = qw(parsefile);
 @ISA = qw(Exporter);
 
