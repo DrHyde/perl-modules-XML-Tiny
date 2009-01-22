@@ -3,7 +3,7 @@ use XML::Tiny qw(parsefile);
 
 use strict;
 require "t/test_functions";
-print "1..6\n";
+print "1..7\n";
 
 $^W = 1;
 
@@ -38,6 +38,12 @@ is_deeply(
     "Passing a lexical filehandle works"
 );
 close($foo);
+
+is_deeply(
+    parsefile("_TINY_XML_STRING_<x>\n</x>"),
+    parsefile('t/minimal.xml'),
+    "Strings of XML work with newlines in"
+);
 
 is_deeply(
     parsefile('_TINY_XML_STRING_<x></x>'),

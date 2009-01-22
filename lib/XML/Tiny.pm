@@ -6,7 +6,7 @@ require Exporter;
 
 use vars qw($VERSION @EXPORT_OK @ISA);
 
-$VERSION = '1.11';
+$VERSION = '1.12';
 @EXPORT_OK = qw(parsefile);
 @ISA = qw(Exporter);
 
@@ -168,8 +168,8 @@ sub parsefile {
     $strict_entity_parsing = $params{strict_entity_parsing};
 
     if(ref($arg) eq '') { # we were passed a filename or a string
-        if($arg =~ /^_TINY_XML_STRING_(.*)/) { # it's a string
-            $file = $1;
+        if($arg =~ /^_TINY_XML_STRING_/) { # it's a string
+            $file = substr($arg, 17);
         } else {
             local *FH;
             open(FH, $arg) || die(__PACKAGE__."::parsefile: Can't open $arg\n");
