@@ -6,7 +6,7 @@ require Exporter;
 
 use vars qw($VERSION @EXPORT_OK @ISA);
 
-$VERSION = '1.12';
+$VERSION = '2.0';
 @EXPORT_OK = qw(parsefile parsedommish);
 @ISA = qw(Exporter);
 
@@ -530,7 +530,7 @@ to 'Corion' for finding a bug with localised filehandles and providing a fix.
 
 Copyright 2007-2009 David Cantrell E<lt>david@cantrell.org.ukE<gt>
 
-his software is free-as-in-speech software, and may be used,
+This software is free-as-in-speech software, and may be used,
 distributed, and modified under the terms of either the GNU
 General Public Licence version 2 or the Artistic Licence.  It's
 up to you which one you use.  The full text of the licences can
