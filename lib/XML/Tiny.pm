@@ -189,8 +189,8 @@ then you can query it thus:
         $rsync->shortargs->values(),
         $srync->longargs->values()
     ];
-    my $secondshortarg = $config->rsync->shortargs->arg(1);
-    my @shortargs      = $config->rsync->shortargs->arg('*');
+    my $secondshortarg = $rsync->shortargs->arg(1);
+    my @shortargs      = $rsync->shortargs->arg('*');
 
 The methods (eg C<binary>, C<rsync> etc) in the synopsis above are created
 using AUTOLOAD.  The AUTOLOADer first looks for an attribute with the
