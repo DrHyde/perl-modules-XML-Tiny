@@ -1,3 +1,6 @@
+2.01    2009-03-23    Remove values() method from DOMmish interface - not
+                        needed because we have ...->element('*')
+
 2.0     2009-03-22    Add parsedommish() constructor, taken from
                         experimental rsnapshot fork
 

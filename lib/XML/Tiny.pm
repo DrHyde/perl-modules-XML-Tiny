@@ -6,7 +6,7 @@ require Exporter;
 
 use vars qw($VERSION @EXPORT_OK @ISA);
 
-$VERSION = '2.0';
+$VERSION = '2.01';
 @EXPORT_OK = qw(parsefile parsedommish);
 @ISA = qw(Exporter);
 
@@ -185,10 +185,6 @@ then you can query it thus:
 
     my $rsync = $document->externalprograms->rsync();
     my $rsyncbinary = $rsync->binary();
-    my $rsyncargs   = [
-        $rsync->shortargs->values(),
-        $srync->longargs->values()
-    ];
     my $secondshortarg = $rsync->shortargs->arg(1);
     my @shortargs      = $rsync->shortargs->arg('*');
 
@@ -212,10 +208,6 @@ method.
 Nodes stringify to their contents if necessary, and can also be compared
 for string (in)equality.  Note that when stringifying, leading and
 trailing whitespace is removed.
-
-=head3 values
-
-Returns a list of the string contents of all child nodes.
 
 =cut
 
@@ -580,15 +572,6 @@ sub AUTOLOAD {
     } else {
         return (grep { $_->name() eq $wanted } @childnodes)[0];
     }
-}
-sub values {
-    my $self = shift;
-    my @values = ();
-    if(exists($self->{content}) && ref($self->{content}) eq 'ARRAY') {
-        push @values, __PACKAGE__->new($_)->_gettext()
-            foreach (@{$self->{content}});
-    }
-    return @values;
 }
 
 sub _gettext {

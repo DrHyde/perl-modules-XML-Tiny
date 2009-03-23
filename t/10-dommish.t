@@ -1,7 +1,7 @@
 use strict;
 $^W=1;
 
-print "1..17\n";
+print "1..15\n";
 require "t/test_functions";
 
 use XML::Tiny qw(parsedommish);
@@ -22,17 +22,6 @@ ok($c->externalprograms->cp->binary eq '/bin/cp', "attribs work on deeply nested
 ok(''.$c->externalprograms->rsync->shortargs->arg eq '-a', "... as does stringification");
 ok($c->externalprograms->rsync->shortargs->arg eq '-a', "... and stringy equality checks");
 ok($c->externalprograms->rsync->shortargs->arg ne '-b', "... and stringy inequality checks");
-
-is_deeply(
-    [$c->externalprograms->rsync->longargs->values()],
-    [qw(--delete --numeric-ids --relative --delete-excluded)],
-    "values() works when there are values"
-);
-is_deeply(
-    [$c->externalprograms->cp->values()],
-    [],
-    "... and when there aren't"
-);
 
 ok($c->intervals->interval(0)->name eq 'alpha', "can get an individual child which exists several times");
 ok($c->intervals->interval(2)->name eq 'gamma', "... and not just the first of 'em!");
