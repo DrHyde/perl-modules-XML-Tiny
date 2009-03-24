@@ -217,5 +217,3 @@ t/51-localize-filehandle.t
 t/localize-filehandles.xml
 ARTISTIC.txt
 GPL2.txt
-t/10-dommish.t
-t/rsnapshot.conf.xml
