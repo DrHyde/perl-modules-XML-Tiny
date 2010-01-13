@@ -6,7 +6,7 @@ require Exporter;
 
 use vars qw($VERSION @EXPORT_OK @ISA);
 
-$VERSION = '2.02';
+$VERSION = '2.03';
 @EXPORT_OK = qw(parsefile);
 @ISA = qw(Exporter);
 
@@ -157,7 +157,7 @@ If you prefer a DOMmish interface, then look at L<XML::Tiny::DOM> on the CPAN.
 =cut
 
 my %regexps = (
-    name => '[:a-z][\\w:\\.-]*'
+    name => '[:_a-z][\\w:\\.-]*'
 );
 
 my $strict_entity_parsing; # mmm, global. don't worry, parsefile sets it
@@ -462,7 +462,10 @@ enough to point out ways it could be improved;
 to Sergio Fanchiotti for pointing out a bug in handling self-closing tags,
 and for reporting another bug that I introduced when fixing the first one;
 
-to 'Corion' for finding a bug with localised filehandles and providing a fix.
+to 'Corion' for finding a bug with localised filehandles and providing a fix;
+
+to Diab Jerius for spotting that element and attribute names can begin
+with an underscore.
 
 Copyright 2007-2009 David Cantrell E<lt>david@cantrell.org.ukE<gt>
 
