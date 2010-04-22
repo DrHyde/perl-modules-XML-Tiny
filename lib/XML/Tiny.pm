@@ -6,7 +6,7 @@ require Exporter;
 
 use vars qw($VERSION @EXPORT_OK @ISA);
 
-$VERSION = '2.03';
+$VERSION = '2.04';
 @EXPORT_OK = qw(parsefile);
 @ISA = qw(Exporter);
 
@@ -188,9 +188,11 @@ sub parsefile {
     # turn CDATA into PCDATA
     $file =~ s{<!\[CDATA\[(.*?)]]>}{
         $_ = $1.chr(0);          # this makes sure that empty CDATAs become
-        s/([&<>])/               # the empty string and aren't just thrown away.
-            $1 eq '&' ? '&amp;' :
-            $1 eq '<' ? '&lt;'  :
+        s/([&<>'"])/             # the empty string and aren't just thrown away.
+            $1 eq '&' ? '&amp;'  :
+            $1 eq '<' ? '&lt;'   :
+            $1 eq '"' ? '&quot;' :
+            $1 eq "'" ? '&apos;' :
                         '&gt;'
         /eg;
         $_;
@@ -198,8 +200,8 @@ sub parsefile {
 
     die("Not well-formed\n") if(
         $file =~ /]]>/ ||                          # ]]> not delimiting CDATA
-	$file =~ /<!--(.*?)--->/s ||               # ---> can't end a comment
-	grep { $_ && /--/ } ($file =~ /^\s+|<!--(.*?)-->|\s+$/gs) # -- in comm
+        $file =~ /<!--(.*?)--->/s ||               # ---> can't end a comment
+        grep { $_ && /--/ } ($file =~ /^\s+|<!--(.*?)-->|\s+$/gs) # -- in comm
     );
 
     # strip leading/trailing whitespace and comments (which don't nest - phew!)
@@ -218,53 +220,53 @@ sub parsefile {
     foreach my $token (grep { length && $_ !~ /^\s+$/ }
       split(/(<[^>]+>)/, $file)) {
         if(
-	    $token =~ /<\?$regexps{name}.*?\?>/is ||  # PI
-	    $token =~ /^<!(ENTITY|DOCTYPE)/i          # entity/doctype decl
-	) {
-	    next;
+          $token =~ /<\?$regexps{name}.*?\?>/is ||  # PI
+          $token =~ /^<!(ENTITY|DOCTYPE)/i          # entity/doctype decl
+        ) {
+            next;
         } elsif($token =~ m!^</($regexps{name})\s*>!i) {     # close tag
-	    die("Not well-formed\n\tat $token\n") if($elem->{name} ne $1);
-	    $elem = delete $elem->{parent};
+            die("Not well-formed\n\tat $token\n") if($elem->{name} ne $1);
+            $elem = delete $elem->{parent};
         } elsif($token =~ /^<$regexps{name}(\s[^>]*)*(\s*\/)?>/is) {   # open tag
-	    my($tagname, $attribs_raw) = ($token =~ m!<(\S*)(.*?)(\s*/)?>!s);
-	    # first make attribs into a list so we can spot duplicate keys
-	    my $attrib  = [
-	        # do double- and single- quoted attribs seperately
-	        $attribs_raw =~ /\s($regexps{name})\s*=\s*"([^"]*?)"/gi,
-	        $attribs_raw =~ /\s($regexps{name})\s*=\s*'([^']*?)'/gi
-	    ];
-	    if(@{$attrib} == 2 * keys %{{@{$attrib}}}) {
-	        $attrib = { @{$attrib} }
-	    } else { die("Not well-formed - duplicate attribute\n"); }
-	    
-	    # now trash any attribs that we *did* manage to parse and see
-	    # if there's anything left
-	    $attribs_raw =~ s/\s($regexps{name})\s*=\s*"([^"]*?)"//gi;
-	    $attribs_raw =~ s/\s($regexps{name})\s*=\s*'([^']*?)'//gi;
-	    die("Not well-formed\n$attribs_raw") if($attribs_raw =~ /\S/ || grep { /</ } values %{$attrib});
+            my($tagname, $attribs_raw) = ($token =~ m!<(\S*)(.*?)(\s*/)?>!s);
+            # first make attribs into a list so we can spot duplicate keys
+            my $attrib  = [
+                # do double- and single- quoted attribs seperately
+                $attribs_raw =~ /\s($regexps{name})\s*=\s*"([^"]*?)"/gi,
+                $attribs_raw =~ /\s($regexps{name})\s*=\s*'([^']*?)'/gi
+            ];
+            if(@{$attrib} == 2 * keys %{{@{$attrib}}}) {
+                $attrib = { @{$attrib} }
+            } else { die("Not well-formed - duplicate attribute\n"); }
+            
+            # now trash any attribs that we *did* manage to parse and see
+            # if there's anything left
+            $attribs_raw =~ s/\s($regexps{name})\s*=\s*"([^"]*?)"//gi;
+            $attribs_raw =~ s/\s($regexps{name})\s*=\s*'([^']*?)'//gi;
+            die("Not well-formed\n$attribs_raw") if($attribs_raw =~ /\S/ || grep { /</ } values %{$attrib});
 
-	    unless($params{no_entity_parsing}) {
-	        foreach my $key (keys %{$attrib}) {
-	            $attrib->{$key} = _fixentities($attrib->{$key})
+            unless($params{no_entity_parsing}) {
+                foreach my $key (keys %{$attrib}) {
+                    ($attrib->{$key} = _fixentities($attrib->{$key})) =~ s/\x00//g; # get rid of CDATA marker
                 }
             }
-	    $elem = {
+            $elem = {
                 content => [],
                 name => $tagname,
                 type => 'e',
                 attrib => $attrib,
                 parent => $elem
             };
-	    push @{$elem->{parent}->{content}}, $elem;
-	    # now handle self-closing tags
+            push @{$elem->{parent}->{content}}, $elem;
+            # now handle self-closing tags
             if($token =~ /\s*\/>$/) {
                 $elem->{name} =~ s/\/$//;
-	        $elem = delete $elem->{parent};
+                $elem = delete $elem->{parent};
             }
         } elsif($token =~ /^</) { # some token taggish thing
             die("I can't handle this document\n\tat $token\n");
         } else {                          # ordinary content
-	    $token =~ s/\x00//g; # get rid of our CDATA marker
+            $token =~ s/\x00//g; # get rid of our CDATA marker
             unless($params{no_entity_parsing}) { $token = _fixentities($token); }
             push @{$elem->{content}}, { content => $token, type => 't' };
         }
@@ -283,10 +285,10 @@ sub _fixentities {
     my $junk = ($strict_entity_parsing) ? '|.*' : '';
     $thingy =~ s/&((#(\d+|x[a-fA-F0-9]+);)|lt;|gt;|quot;|apos;|amp;$junk)/
         $3 ? (
-	    substr($3, 0, 1) eq 'x' ?     # using a =~ match here clobbers $3
-	        chr(hex(substr($3, 1))) : # so don't "fix" it!
-		chr($3)
-	) :
+            substr($3, 0, 1) eq 'x' ?     # using a =~ match here clobbers $3
+                chr(hex(substr($3, 1))) : # so don't "fix" it!
+                chr($3)
+        ) :
         $1 eq 'lt;'   ? '<' :
         $1 eq 'gt;'   ? '>' :
         $1 eq 'apos;' ? "'" :
@@ -465,9 +467,12 @@ and for reporting another bug that I introduced when fixing the first one;
 to 'Corion' for finding a bug with localised filehandles and providing a fix;
 
 to Diab Jerius for spotting that element and attribute names can begin
-with an underscore.
+with an underscore;
 
-Copyright 2007-2009 David Cantrell E<lt>david@cantrell.org.ukE<gt>
+to Nick Dumas for finding a bug when attribs have their quoting character
+in CDATA, and providing a patch.
+
+Copyright 2007-2010 David Cantrell E<lt>david@cantrell.org.ukE<gt>
 
 This software is free-as-in-speech software, and may be used,
 distributed, and modified under the terms of either the GNU

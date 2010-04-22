@@ -10,7 +10,13 @@ my $counter = 0;
 sub ok {
     $counter++;
     print ''.($_[0] ? 'ok ' : 'not ok ').$counter."\t$_[1]\n";
+    return $_[0];
 }
+
+sub is {
+    ok($_[0] eq $_[1], $_[2]) ||
+      print "# got: [$_[0]]\n# exp: [$_[1]]\n";
+}    
 
 # compares first two args deeply, prints "[not] ok ..." followed by third arg
 # NB *only* handles scalars, hashes and arrays
