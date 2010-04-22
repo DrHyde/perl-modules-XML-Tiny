@@ -218,3 +218,5 @@ t/localize-filehandles.xml
 ARTISTIC.txt
 GPL2.txt
 t/52-bugfix-namecharacters.t
+t/53-bugfix-cdata-in-attrib.t
+t/cdata-in-attrib.xml
