@@ -6,7 +6,7 @@ require Exporter;
 
 use vars qw($VERSION @EXPORT_OK @ISA);
 
-$VERSION = '2.04';
+$VERSION = '2.05';
 @EXPORT_OK = qw(parsefile);
 @ISA = qw(Exporter);
 
@@ -180,6 +180,10 @@ sub parsefile {
             close(FH);
         }
     } else { $file = <$arg>; }
+
+    # strip any BOM
+    $file =~ s/^(\xff\xfe(\x00\x00)?|(\x00\x00)?\xfe\xff|\xef\xbb\xbf)//;
+
     die("No elements\n") if (!defined($file) || $file =~ /^\s*$/);
 
     # illegal low-ASCII chars
@@ -335,7 +339,7 @@ The lack of Unicode and friends in older perls means that XML::Tiny
 does nothing with character sets.  If you have a document with a funny
 character set, then you will need to open the file in an appropriate
 mode using a character-set-friendly perl and pass the resulting file
-handle to the module.
+handle to the module.  BOMs are ignored.
 
 =head2 The subset of XML that we understand
 
@@ -470,7 +474,9 @@ to Diab Jerius for spotting that element and attribute names can begin
 with an underscore;
 
 to Nick Dumas for finding a bug when attribs have their quoting character
-in CDATA, and providing a patch.
+in CDATA, and providing a patch;
+
+to Mathieu Longtin for pointing out that BOMs exist.
 
 Copyright 2007-2010 David Cantrell E<lt>david@cantrell.org.ukE<gt>
 
