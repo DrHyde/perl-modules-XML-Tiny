@@ -226,3 +226,5 @@ t/bom-UTF-16-LE.xml
 t/bom-UTF-8.xml
 t/bom-UTF-32-BE.xml
 t/bom-UTF-32-LE.xml
+t/55-null-chars-in-input.t
+t/null-chars.xml

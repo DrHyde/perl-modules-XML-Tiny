@@ -1,3 +1,5 @@
+2.06    2010-12-16    Better error reporting
+
 2.05    2010-08-13    Bugfix: BOMs exist
 
 2.04    2010-04-22    Bugfix: CDATA in attribute may contain quote chars

@@ -6,7 +6,7 @@ require Exporter;
 
 use vars qw($VERSION @EXPORT_OK @ISA);
 
-$VERSION = '2.05';
+$VERSION = '2.06';
 @EXPORT_OK = qw(parsefile);
 @ISA = qw(Exporter);
 
@@ -187,7 +187,7 @@ sub parsefile {
     die("No elements\n") if (!defined($file) || $file =~ /^\s*$/);
 
     # illegal low-ASCII chars
-    die("Not well-formed\n") if($file =~ /[\x00-\x08\x0b\x0c\x0e-\x1f]/);
+    die("Not well-formed (Illegal low-ASCII chars found)\n") if($file =~ /[\x00-\x08\x0b\x0c\x0e-\x1f]/);
 
     # turn CDATA into PCDATA
     $file =~ s{<!\[CDATA\[(.*?)]]>}{
@@ -202,7 +202,7 @@ sub parsefile {
         $_;
     }egs;
 
-    die("Not well-formed\n") if(
+    die("Not well-formed (CDATA not delimited or bad comment)\n") if(
         $file =~ /]]>/ ||                          # ]]> not delimiting CDATA
         $file =~ /<!--(.*?)--->/s ||               # ---> can't end a comment
         grep { $_ && /--/ } ($file =~ /^\s+|<!--(.*?)-->|\s+$/gs) # -- in comm
@@ -275,7 +275,7 @@ sub parsefile {
             push @{$elem->{content}}, { content => $token, type => 't' };
         }
     }
-    die("Not well-formed\n") if(exists($elem->{parent}));
+    die("Not well-formed (Duplicated parent)\n") if(exists($elem->{parent}));
     die("Junk after end of document\n") if($#{$elem->{content}} > 0);
     die("No elements\n") if(
         $#{$elem->{content}} == -1 || $elem->{content}->[0]->{type} ne 'e'
@@ -466,7 +466,8 @@ to the people on L<http://use.perl.org/> and elsewhere who have been kind
 enough to point out ways it could be improved;
 
 to Sergio Fanchiotti for pointing out a bug in handling self-closing tags,
-and for reporting another bug that I introduced when fixing the first one;
+for reporting another bug that I introduced when fixing the first one,
+and for providing a patch to improve error reporting;
 
 to 'Corion' for finding a bug with localised filehandles and providing a fix;
 
