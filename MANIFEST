@@ -228,3 +228,4 @@ t/bom-UTF-32-BE.xml
 t/bom-UTF-32-LE.xml
 t/55-null-chars-in-input.t
 t/null-chars.xml
+MANIFEST.SKIP
