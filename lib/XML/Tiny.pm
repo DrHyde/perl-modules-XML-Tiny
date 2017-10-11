@@ -428,8 +428,8 @@ available.  XML::Tiny exists for those people.
 =head1 BUGS and FEEDBACK
 
 I welcome feedback about my code, including constructive criticism.
-Bug reports should be made using L<http://rt.cpan.org/> or by email,
-and should include the smallest possible chunk of code, along with
+Bug reports should be made on Github or by email.
+They should include the smallest possible chunk of code, along with
 any necessary XML data, which demonstrates the bug.  Ideally, this
 will be in the form of a file which I can drop in to the module's
 test suite.  Please note that such files must work in perl 5.004.
