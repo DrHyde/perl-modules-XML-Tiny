@@ -50,3 +50,11 @@ is_deeply(
     parsefile('t/minimal.xml'),
     "Strings of XML work"
 );
+
+is_deeply(
+    parsefile(\*DATA),
+    parsefile('t/minimal.xml'),
+    "Can read from DATA filehandle"
+);
+__END__
+<x></x>
