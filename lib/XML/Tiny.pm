@@ -212,7 +212,10 @@ sub parsefile {
     $file =~ s/^\s+|<!--(.*?)-->|\s+$//gs;
     
     # turn quoted > in attribs into &gt;
-    # double- and single-quoted attrib values get done seperately
+    # we have a problem in that we look for $name='$value', but if $value ends
+    # with an equals sign (surrounded by optional space) then the $value may look
+    # like what we're looking for, and so > that are actually *outside* attribs
+    # may get bollocksed up. See https://github.com/DrHyde/perl-modules-XML-Tiny/issues/3
     while($file =~ s/($regexps{name}\s*=\s*"[^"]*)>([^"]*")/$1&gt;$2/gsi) {}
     while($file =~ s/($regexps{name}\s*=\s*'[^']*)>([^']*')/$1&gt;$2/gsi) {}
 

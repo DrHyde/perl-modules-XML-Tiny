@@ -229,3 +229,5 @@ t/bom-UTF-32-LE.xml
 t/55-null-chars-in-input.t
 t/null-chars.xml
 MANIFEST.SKIP
+t/github-issue-3-duplicate-attribute.t
+t/github-issue-3-not-well-formed.t
