@@ -4,7 +4,7 @@ use lib '.';
 use FileHandle;
 use XML::Tiny qw(parsefile);
 require "t/test_functions";
-print "1..7\n";
+print "1..8\n";
 
 $^W = 1;
 $SIG{__WARN__} = sub { die("Caught a warning, making it fatal:\n\n$_[0]\n"); };
