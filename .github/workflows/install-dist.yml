@@ -17,7 +17,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: dist-for-installation-test
-          path: '*.tar.gz'
+          path: 'XML-Tiny*.tar.gz'
           retention-days: 1
   install-linux:
     runs-on: 'ubuntu-latest'
