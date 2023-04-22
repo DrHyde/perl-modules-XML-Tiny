@@ -317,8 +317,8 @@ Instead of saying this:
   use XML::Parser;
   use XML::Parser::EasyTree;
   $XML::Parser::EasyTree::Noempty=1;
-  my $p=new XML::Parser(Style=>'EasyTree');
-  my $tree=$p->parsefile('something.xml');
+  my $p = XML::Parser->new(Style=>'EasyTree');
+  my $tree = $p->parsefile('something.xml');
 
 you would say:
 
