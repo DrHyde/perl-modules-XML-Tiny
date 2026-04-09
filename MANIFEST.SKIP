@@ -1,2 +1,3 @@
 .travis.yml
 ^\.git
+t/w3c-xml-tests.tar.gz
