@@ -35,5 +35,7 @@ jobs:
         - latest
 name: Windows
 on:
-- push
-- pull_request
+  push:
+    paths:
+      - '.github/workflows/windows.yml'
+      - '.github/workflows/run-windows'

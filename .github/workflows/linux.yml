@@ -1,4 +1,8 @@
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - '.github/workflows/linux.yml'
+      - '.github/workflows/run-linux'
 name: Linux
 
 jobs:
