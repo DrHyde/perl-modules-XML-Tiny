@@ -1,0 +1,3 @@
+--ignore-dir=t/w3c/not-wf/sa
+--ignore-dir=t/w3c/not-wf/ext-sa
+--ignore-dir=t/w3c/not-wf/not-sa
